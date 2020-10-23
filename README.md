@@ -1,18 +1,22 @@
 #Description:
+
 Source code enabling replication of experiments in the paper
  by M. Romaszewski, P.Glomb, M. Cholewa, A. Sochan  
 `**A Dataset for Evaluating Blood Detection in Hyperspectral Images**'
 preprint: https://arxiv.org/abs/2008.10254
 
 #The dataset associated with that source code: 
+
 The dataset is available online:
 https://zenodo.org/deposit/3984905
 
 #Implementation:
+
 Experiments were implemented in Python 3.6.9 using libraries:
 numpy 1.16.4, scipy 1.3.1, scikit-learn 0.22.1, matplotlib 3.2.2
 
 #Usage:
+
 <ul>
 <li> Ensure that the dataset patch in ds_load.py is correct
 <li> Run experiments first, before generating results (unless it is dataset presentation)
@@ -41,4 +45,5 @@ Unless the library is provided, its spectra will replaced with a spectrum from t
 
 
 #License:
+
 The code is licensed under GNU General Public License v.3.0
