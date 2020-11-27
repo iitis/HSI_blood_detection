@@ -10,7 +10,7 @@ The dataset associated with that source code:
 ---------------------------------------------
 
 The dataset is available online:
-https://zenodo.org/deposit/3984905
+https://zenodo.org/record/3984905
 
 Implementation:
 ---------------
