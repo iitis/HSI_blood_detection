@@ -4,7 +4,7 @@ Description:
 Source code enabling replication of experiments in the paper
  by M. Romaszewski, P.Glomb, M. Cholewa, A. Sochan  
 `**A Dataset for Evaluating Blood Detection in Hyperspectral Images**'
-preprint: https://arxiv.org/abs/2008.10254
+Journal article: https://doi.org/10.1016/j.forsciint.2021.110701
 
 The dataset associated with that source code:
 ---------------------------------------------
