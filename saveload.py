@@ -39,35 +39,39 @@ import unittest
 
 # ----------------------------------------------------------------------------
 
+
 def bz2load(fname_or_string):
     try:
-        with open(fname_or_string, 'rb') as f:
+        with open(fname_or_string, "rb") as f:
             data = f.read()
     except IOError:
         data = b64decode(fname_or_string)
     return pickle.loads(bz2.decompress(data))
 
+
 # ----------------------------------------------------------------------------
+
 
 def bz2save(data, fname=None):
     compressed = bz2.compress(pickle.dumps(data, pickle.HIGHEST_PROTOCOL))
     if fname is None:
         return b64encode(compressed)
     else:
-        with open(fname, 'wb') as f:
+        with open(fname, "wb") as f:
             return f.write(compressed)
+
 
 # ----------------------------------------------------------------------------
 
 
 class Aaa(object):
-    def __init__(self, b=2): self.a = b
+    def __init__(self, b=2):
+        self.a = b
 
 
 class Bz2LoadSaveTest(unittest.TestCase):
-       
-    def test_1(self, fname='test'):
-        import os        
+    def test_1(self, fname="test"):
+        import os
 
         a = Aaa(42)
         aa = bz2load(bz2save(a))
@@ -76,20 +80,21 @@ class Bz2LoadSaveTest(unittest.TestCase):
         aa = bz2load(fname)
         self.assertEqual(aa.a, 42)
         os.remove(fname)
-    
-    def test_2(self, fname='test'):
+
+    def test_2(self, fname="test"):
         import numpy as np
         import os
-        
+
         b = np.random.randn(11, 12, 13)
         bb = bz2load(bz2save(b))
         np.testing.assert_array_equal(bb, b)
         bz2save(b, fname)
         bb = bz2load(fname)
         np.testing.assert_array_equal(bb, b)
-        os.remove(fname)        
-    
+        os.remove(fname)
+
+
 # ----------------------------------------------------------------------------
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

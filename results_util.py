@@ -28,64 +28,81 @@ Detection performance measures (AUC+ROC/PR)
 
 import unittest
 import numpy as np
-from sklearn.metrics import roc_curve,auc
+from sklearn.metrics import roc_curve, auc
 from sklearn.metrics import precision_recall_curve
 
-def comp_pr(res,gt):
+
+def comp_pr(res, gt):
     """
     computers Precision-Recall measures
-    
+
     parameters:
         res: detection result
         gt: ground truth (class 1 is the target)
     returns:
-        AUC, precision, recall    
+        AUC, precision, recall
     """
     y_pred = np.ravel(res.copy())
     y_test = np.ravel(gt.copy())
-    y_test[y_test!=1]=0
-    precision, recall, _ = precision_recall_curve(y_test, y_pred,pos_label=1)
+    y_test[y_test != 1] = 0
+    precision, recall, _ = precision_recall_curve(y_test, y_pred, pos_label=1)
     vauc = auc(recall, precision)
-    return vauc,precision,recall
+    return vauc, precision, recall
 
-def comp_roc(res,gt):
+
+def comp_roc(res, gt):
     """
     computers ROC measures
-    
+
     parameters:
         res: detection result
         gt: ground truth (class 1 is the target)
     returns:
-        AUC, FPR, TPR    
+        AUC, FPR, TPR
     """
     y_pred = np.ravel(res.copy())
     y_test = np.ravel(gt.copy())
-    y_test[y_test!=1]=0
-    fpr, tpr, _ = roc_curve(y_test, y_pred,1)
-    vauc = auc(fpr,tpr)
-    return vauc,fpr,tpr   
+    y_test[y_test != 1] = 0
+    fpr, tpr, _ = roc_curve(y_test, y_pred)
+    vauc = auc(fpr, tpr)
+    return vauc, fpr, tpr
 
 
 class LoadTest(unittest.TestCase):
-    def test_random(self): 
-        N=10000
-        gt = np.random.randint(2,size=N)
-        res=np.random.rand(N)
+    def test_random(self):
+        N = 10000
+        gt = np.random.randint(2, size=N)
+        res = np.random.rand(N)
         import matplotlib.pyplot as plt
-        
-        vauc_pr, precision, recall = comp_pr(res,gt)
-        vauc_roc, fpr,tpr = comp_roc(res,gt)
-        self.assertLess(np.abs(vauc_pr-0.5),0.05)
-        self.assertLess(np.abs(vauc_roc-0.5),0.05)
-        
-        plt.subplot(1,2,1)
-        plt.plot(recall, precision,label="PR AUC:{:0.2f}".format(vauc_pr),alpha=0.7,markevery=0.3,lw=2)
+
+        vauc_pr, precision, recall = comp_pr(res, gt)
+        vauc_roc, fpr, tpr = comp_roc(res, gt)
+        self.assertLess(np.abs(vauc_pr - 0.5), 0.05)
+        self.assertLess(np.abs(vauc_roc - 0.5), 0.05)
+
+        plt.subplot(1, 2, 1)
+        plt.plot(
+            recall,
+            precision,
+            label="PR AUC:{:0.2f}".format(vauc_pr),
+            alpha=0.7,
+            markevery=0.3,
+            lw=2,
+        )
         plt.legend()
-        plt.subplot(1,2,2)
-        plt.plot(fpr, tpr,label="ROC AUC:{:0.2f}".format(vauc_roc),alpha=0.7,markevery=0.3,lw=2)
+        plt.subplot(1, 2, 2)
+        plt.plot(
+            fpr,
+            tpr,
+            label="ROC AUC:{:0.2f}".format(vauc_roc),
+            alpha=0.7,
+            markevery=0.3,
+            lw=2,
+        )
         plt.legend()
         plt.show()
         plt.close()
+
 
 if __name__ == "__main__":
     unittest.main()
