@@ -309,4 +309,3 @@ if __name__ == "__main__":
                 N=N,
                 N_supression=N_supression,
             )
-        sys.exit()

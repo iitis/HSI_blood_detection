@@ -144,5 +144,5 @@ def fire_sensitivity():
 
 if __name__ == "__main__":
     fire_experiment(N=1000)
-    if False:
+    if True:
         fire_sensitivity()

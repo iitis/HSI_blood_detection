@@ -67,6 +67,7 @@ class MatchedFilter:
         """
         self.mu_t = np.mean(X_target, axis=0) if len(X_target.shape) > 1 else X_target
         self.C_d = empirical_covariance(X_data)
+
         self.C_d = lin.inv(self.C_d)
         self.mu_d = np.mean(X_data, axis=0)
         # constant denominator
@@ -84,8 +85,12 @@ class MatchedFilter:
         array of scores (higher is better)
         """
         T = X - self.mu_d
-        l = np.array([np.dot(np.dot(t, self.C_d), self.mu) for t in T])
-        return l / self.d
+        # old, slow
+        # ll = np.array([np.dot(np.dot(t, self.C_d), self.mu) for t in T])
+
+        # new, fast
+        ll = np.dot(np.dot(T, self.C_d), self.mu)
+        return ll / self.d
 
     def fit_predict(self, X_target, X_data):
         """
@@ -125,6 +130,20 @@ class Test(unittest.TestCase):
         plt.tight_layout()
         plt.show()
         plt.close()
+
+    def test_detectors_fast(self):
+        for rs in np.arange(10) + 42:
+            np.random.seed(rs)
+            T = np.random.normal(0, 0.2, (50, 2))
+            B = np.random.normal(1, 0.4, (100, 2))
+            X = np.vstack((B, T))
+
+            mf = MatchedFilter()
+            pred_mf = mf.fit_predict(T, X)
+            T = X - mf.mu_d
+            pred_mf2 = np.array([np.dot(np.dot(t, mf.C_d), mf.mu) for t in T]) / mf.d
+            err = np.linalg.norm(pred_mf - pred_mf2)
+            self.assertLess(err, 10e-5)
 
 
 if __name__ == "__main__":
